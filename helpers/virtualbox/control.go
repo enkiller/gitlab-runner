@@ -124,7 +124,7 @@ func Exist(vmName string) bool {
 func CreateOsVM(vmName string, templateName string, templateSnapshot string, baseFolder string) error {
 	args := []string{"clonevm", vmName, "--mode", "machine", "--name", templateName, "--register"}
 	if templateSnapshot != "" {
-		args = append(args, "--snapshot", templateSnapshot, "--options", "link")
+		args = append(args, "--snapshot", templateSnapshot, "--options", "link", "--options", "KeepHwUUIDs")
 	}
 	if baseFolder != "" {
 		args = append(args, "--basefolder", baseFolder)

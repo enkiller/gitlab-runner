@@ -1,0 +1,27 @@
+name: Build
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+  pull_request:
+    branches:
+      - build
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '^1.13.1' # The Go version to download (if necessary) and use.
+      - run: go version
+      - run: sudo apt-get install -y binfmt-support qemu-user-static
+      - run: go get gitlab.com/gitlab-org/gitlab-runner
+      - run: make
+      - run: tar -zcvf out/runner.tar.gz out/binaries
+      - uses: actions/upload-artifact@v3
+        with:
+          name: runner
+          path: out/runner.tar.gz
